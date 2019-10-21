@@ -1,0 +1,87 @@
+*{
+	font-family: sans-serif;
+	padding: 7px;
+	color: gray;
+}
+
+body{
+	background-color: lightgray;
+}
+
+body > header {
+	background: url("../img/ffak_logo.png"),
+				url("../img/thb_logo02.png");
+	background-repeat: no-repeat,
+						no-repeat;
+	background-position: top left,
+						top right;					
+	background-color: white;
+	background-size: 420px 120px;
+	border-radius: 5px;
+	box-shadow: 4px -2px 8px black;
+	height: 180px;
+}
+
+body > footer {
+	border-radius: 5px;
+	box-shadow: 4px 4px 8px black;
+	background-color: white;
+	height: 100px;
+	/*width: 99.%;*/
+	bottom: 10px;
+	position: relative;
+	margin-top: 15px;
+}
+
+#content{
+	border-radius: 5px;
+	box-shadow: 4px 0px 8px black;
+	background-color: white;
+	min-height: 600px;
+	margin-top: 5px;
+}
+
+a{
+	color: gray;
+	text-decoration: none;
+}
+
+a:hover, .title {
+	color: black;
+	text-shadow: 0 0 8px lightgray, 0 0 16px lightgray;	
+}
+
+input:not([type='image']), textarea{
+	width: 200px;
+}
+
+nav{
+	margin-top:58px;
+}
+
+#footerTable{
+	width:100%;
+	text-align: center;
+}
+
+#shoppingCart{
+		position: relative;
+		font-size: 75%;
+		float: right;
+		top: -55px;
+		right: 7%;
+}
+
+#shoppingCartTable{
+	border: 1px solid lightgray;
+	border-radius: 5px;
+	padding: 1px;
+	background-color: white;
+	box-shadow: 4px 4px 8px gray;
+}
+	
+.shoppingCartTableColumn{
+	padding: 2px;
+	text-align: left;
+}
+

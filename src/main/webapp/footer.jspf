@@ -1,0 +1,24 @@
+	<footer>
+		<div id="footerContainer">
+			<table id="footerTable">
+				<tr>
+					<td>
+						Technische Hochschule Brandenburg <br>
+						Magdeburger Straﬂe 50 <br>
+						14770 Brandenburg an der Havel 
+					</td>
+					<td>
+						<br>
+						&<br>
+					</td>
+					<td>
+						Fraunhofer Fokus-Akademie <br>
+						Kaiserin-Augusta-Allee 31 <br>
+						10589 Berlin 
+					</td>
+				</tr>
+			</table>
+		</div>
+	</footer>
+</body>
+</html>
