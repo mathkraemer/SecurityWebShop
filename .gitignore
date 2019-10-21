@@ -1,3 +1,4 @@
 .polaris-coverity.zip
 .synopsys/
 target/
+.idea/
