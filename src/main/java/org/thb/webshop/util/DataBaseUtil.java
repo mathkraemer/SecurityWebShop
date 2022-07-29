@@ -449,5 +449,3 @@ public class DataBaseUtil {
                                     /*password*/ "jenkins");
 	}
 }
-	
-}
