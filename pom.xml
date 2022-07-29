@@ -196,7 +196,7 @@
                 <version>${version.war.plugin}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <outputDirectory>${env.JBOSS_HOME}/standalone/deployments</outputDirectory>
+                    <!--outputDirectory>${env.JBOSS_HOME}/standalone/deployments</outputDirectory-->
                 </configuration>
             </plugin>
             <!-- The WildFly plugin deploys your war to a local WildFly container -->
@@ -280,9 +280,9 @@
                    	<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-war-plugin</artifactId>
-						<configuration>
+						<!--configuration>
 							<outputDirectory>C:\ApplicationServer\wildfly-10.0.0.Final\standalone\deployments</outputDirectory>
-						</configuration>
+						</configuration-->
 					</plugin>
                 </plugins>
             </build>
@@ -333,7 +333,7 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>${version.war.plugin}</version>
                         <configuration>
-                            <outputDirectory>deployments</outputDirectory>
+                            <!--outputDirectory>deployments</outputDirectory-->
                             <warName>SecurityWebShop</warName>
                         </configuration>
                     </plugin>
