@@ -443,7 +443,7 @@ public class DataBaseUtil {
 		return con;
 	}
 
-	Connection getCon(String url) throws SQLException {
+	Connection getCon01(String url) throws SQLException {
                 return DriverManager.getConnection(url, 
                                     /*username*/ "leroy", 
                                     /*password*/ "jenkins");
