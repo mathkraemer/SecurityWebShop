@@ -1,0 +1,46 @@
+name: Polaris
+on:
+  push:
+    branches: [ master, main ]
+
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    
+    env:
+      SECURITY_GATE_FILTERS: '{ "severity": ["High", "Medium"], "cwe": [ "319" ], "status": [ "new" ] }'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Synopsys Polaris (Full Analysis)
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: jcroall/polaris-report-action@v0.1.0
+        with:
+          polaris-url: ${{ secrets.POLARIS_URL }}
+          polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          debug: true
+          polaris-command: analyze -w
+          # Include the security gate filters - what should cause a policy failure
+          security-gate-filters: ${{ env.SECURITY_GATE_FILTERS }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Synopsys Polaris (Incremental Analysis)
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: jcroall/polaris-report-action@v0.1.0
+        with:
+          polaris-url: ${{ secrets.POLARIS_URL }}
+          polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          debug: true
+          # $CHANGE_SET_FILE_PATH will be automatically replaced with a path to a file
+          # listing the files changed in the GitHub Pull Request.
+          #
+          # If incremental is detected in the polaris command line, the results will be
+          # read from the local NEW issues output rather than via web services.
+          polaris-command: analyze -w --incremental $CHANGE_SET_FILE_PATH
+          # Include the security gate filters - what should cause a policy failure
+          security-gate-filters: ${{ env.SECURITY_GATE_FILTERS }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
