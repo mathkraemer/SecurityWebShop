@@ -1,7 +1,7 @@
 name: runner-test
 on: [push]
 jobs:
-  check-bats-version:
+  test-runner-environment:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
