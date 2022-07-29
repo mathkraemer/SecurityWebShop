@@ -14,7 +14,7 @@ jobs:
       SECURITY_GATE_FILTERS: '{ "severity": ["High", "Medium"], "cwe": [ "319" ], "status": [ "new" ] }'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Synopsys Polaris (Full Analysis)
         if: ${{ github.event_name != 'pull_request' }}
