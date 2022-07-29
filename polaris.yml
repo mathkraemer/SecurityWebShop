@@ -38,5 +38,5 @@ capture:
       - directory: ${project.projectDir}
 install:
   coverity:
-    version: latest
+    version: default
 serverUrl: https://sipse.polaris.synopsys.com
