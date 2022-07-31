@@ -13,7 +13,7 @@ public class DataBaseCredentials {
 	public static final String DB_PASSWORD = "mysqlpassword";
 	
 	public void nr_bug_2(Object testref){
-           if (testref == null)
+           if (testref != null)
 	      System.out.println(testref.toString());
 	   else
               System.out.println("testref is null");
