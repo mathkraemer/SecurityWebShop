@@ -442,5 +442,15 @@ public class DataBaseUtil {
 	public Connection getCon() {
 		return con;
 	}
-	
+
+	/**
+	 * Deliberate bug
+         * with another 5rd irrelevant change
+	 * @return the con
+	 */
+	Connection getCon01(String url) throws SQLException {
+                return DriverManager.getConnection(url, 
+                                    /*username*/ "leroy", 
+                                    /*password*/ "jenkins");
+	}
 }
