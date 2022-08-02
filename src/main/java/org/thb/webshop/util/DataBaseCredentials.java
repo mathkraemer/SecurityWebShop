@@ -12,10 +12,10 @@ public class DataBaseCredentials {
 	public static final String DB_USER = "securitywebshopuser";
 	public static final String DB_PASSWORD = "mysqlpassword";
 	
-	public void nr_bug_2(Object testref){
-           if (testref == null)
+	public void nr_bug(Object testref){
+           if (testref != null)
 	      System.out.println(testref.toString());
 	   else
-              System.out.println("testref is null");
+        System.out.println("testref is null");
 	}
 }
