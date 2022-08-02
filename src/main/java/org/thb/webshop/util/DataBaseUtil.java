@@ -445,7 +445,7 @@ public class DataBaseUtil {
 
 	/**
 	 * Deliberate bug
-         * with another 1st irrelevant change
+         * with another 2nd irrelevant change
 	 * @return the con
 	 */
 	Connection getCon01(String url) throws SQLException {
