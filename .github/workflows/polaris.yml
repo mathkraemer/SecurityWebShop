@@ -1,10 +1,10 @@
 name: Polaris
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master-localscan ]
 
-  pull_request:
-    branches: [ master, main ]
+  #pull_request:
+  #  branches: [ master, main ]
 
 jobs:
   build:
@@ -25,7 +25,7 @@ jobs:
           polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           debug: true
           generate-sarif: true
-          polaris-command: analyze -w
+          polaris-command: --co analyze.mode=local analyze -w
           # Include the security gate filters - what should cause a policy failure
           security-gate-filters: ${{ env.SECURITY_GATE_FILTERS }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
