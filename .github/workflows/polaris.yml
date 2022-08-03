@@ -12,7 +12,7 @@ jobs:
     
     env:
       #SECURITY_GATE_FILTERS: '{ "severity": ["Higher", "Medium"], "cwe": [ "31955" ], "status": [ "new" ] }'
-      SECURITY_GATE_FILTERS: '{ "severity": ["Higher"], }'
+      SECURITY_GATE_FILTERS: '{ "severity": ["Higher"] }'
 
     steps:
       - uses: actions/checkout@v3
@@ -37,9 +37,9 @@ jobs:
           /opt/cov-analysis/bin/cov-format-errors --dir .synopsys/polaris/data/coverity/2022.6.0/idir --json-output-v10 .synopsys/polaris/local-scan-results.v10.json
           /opt/cov-analysis/node/bin/node /opt/cov-analysis/SARIF/cov-format-sarif-for-github.js --inputFile .synopsys/polaris/local-scan-results.v10.json --outputFile .synopsys/polaris/local-scan-results.sarif --githubUrl https://github.com --repoName mathkraemer/SecurityWebShop --checkoutPath mathkraemer/SecurityWebShop . $(git rev-parse HEAD)
           
-      -name: Upload SARIF Results
-       if: ${{ github.event_name != 'pull_request' }}
-       uses: github/codeql-action/upload-sarif@v2
+      - name: Upload SARIF Results
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: github/codeql-action/upload-sarif@v2
         with:
           # Path to SARIF file relative to the root of the repository
           sarif_file: .synopsys/polaris/local-scan-results.sarif
