@@ -35,7 +35,7 @@ jobs:
         run: |
           echo 'Processing findings ...'
           /opt/cov-analysis/bin/cov-format-errors --dir .synopsys/polaris/data/coverity/2022.6.0/idir --json-output-v10 .synopsys/polaris/local-scan-results.v10.json
-          /opt/cov-analysis/node/bin/node /opt/cov-analysis/SARIF/cov-format-sarif-for-github.js --inputFile .synopsys/polaris/local-scan-results.v10.json --outputFile .synopsys/polaris/local-scan-results.sarif --githubUrl https://github.com --repoName mathkraemer/SecurityWebShop --checkoutPath mathkraemer/SecurityWebShop . $(git rev-parse HEAD)
+          /opt/cov-analysis/node/bin/node /opt/cov-analysis/SARIF/cov-format-sarif-for-github.js --inputFile .synopsys/polaris/local-scan-results.v10.json --outputFile .synopsys/polaris/local-scan-results.sarif --githubUrl https://github.com --repoName mathkraemer/SecurityWebShop --checkoutPath mathkraemer/SecurityWebShop /opt/actions-runner/_work/SecurityWebShop/SecurityWebShop $(git rev-parse HEAD)
           
       - name: Upload SARIF Results
         if: ${{ github.event_name != 'pull_request' }}
