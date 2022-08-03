@@ -29,6 +29,8 @@ jobs:
           # Include the security gate filters - what should cause a policy failure
           security-gate-filters: ${{ env.SECURITY_GATE_FILTERS }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo 'This is the command after the action....'
           
       - name: Synopsys Polaris (Incremental Analysis)
         if: ${{ github.event_name == 'pull_request' }}
