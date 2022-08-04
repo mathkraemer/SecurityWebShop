@@ -18,4 +18,12 @@ public class DataBaseCredentials {
 	   else
         System.out.println("nr_bug(testref): testref is null");
 	}
+	
+	
+        public void nr_bug4(Object testref){
+           if (testref == null)
+	      System.out.println(testref.toString());
+	   else
+        System.out.println("nr_bug(testref): testref is null");
+	}
 }
