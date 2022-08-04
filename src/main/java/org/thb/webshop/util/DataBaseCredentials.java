@@ -20,7 +20,7 @@ public class DataBaseCredentials {
 	}
 	
 	public void nr_bug3(Object testref){
-           if (testref != null)
+           if (testref == null)
 	      System.out.println(testref.toString());
 	   else
         System.out.println("nr_bug(testref): testref is null");
