@@ -36,7 +36,7 @@ public class UploadService implements Runnable  {
 	
 	int testForwardNull(String input){
 	    if (input == null){
-		  return null.length();
+		  return input.length();
 	    } else {
 		  return 0;
 	    }
