@@ -33,6 +33,14 @@ public class UploadService implements Runnable  {
 		super();
 		this.asyncContext = asyncContext;
 	}
+	
+	int testForwardNull(String input){
+	    if (input == null){
+		  return null.length();
+	    } else {
+		  return 0;
+	    }
+	}
 
 	/**
 	 * 
