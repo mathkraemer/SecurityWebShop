@@ -13,6 +13,7 @@ jobs:
     env:
       COVERITY_CONNECT_URL: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
       COVERITY_CONNECT_AUTHENTICATION_KEY: ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }}
+      COVERITY_CONNECT_AUTHENTICATION_FILE: coverity-connect.token
 
     steps:
       - uses: actions/checkout@v3
@@ -22,7 +23,8 @@ jobs:
         shell: bash
         run: |
           ## Store access token in auth-key-file.
-          echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > coverity-connect.token
+          echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > ${COVERITY_CONNECT_AUTHENTICATION_FILE}
+          chmod go-rwx ${COVERITY_CONNECT_AUTHENTICATION_FILE}
           ## Create lower case stream name.
           COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}
           COVERITY_CONNECT_STREAM_NAME=${COVERITY_CONNECT_STREAM_NAME,,}
@@ -32,6 +34,9 @@ jobs:
             -o commit.connect.stream=${COVERITY_CONNECT_STREAM_NAME} \
             -o commit.connect.version=${GITHUB_SHA} \
            -o commit.connect.description="GitHub Workflow ${GITHUB_WORKFLOW} for ${GITHUB_REPOSITORY}"
+
+          coverity list > coverity.capture-file-listing.txt
+          cat coverity.capture-file-listing.txt 
           cov-format-errors --dir idir --json-output-v7 coverity-results.json
 
 
