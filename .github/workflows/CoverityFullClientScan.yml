@@ -39,6 +39,17 @@ jobs:
           cat coverity.capture-file-listing.txt 
           cov-format-errors --dir idir --json-output-v7 coverity-results.json
 
+      - name: Archive File Capture Listing
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverity-catpure-file-listing
+          path: coverity.capture-file-listing.txt
+
+      - name: Archive Coverity Summary
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverity-summary
+          path: idir/output/summary.txt
 
       - name: Get Pull Request Changeset
         if: ${{ github.event_name == 'pull_request' }}
