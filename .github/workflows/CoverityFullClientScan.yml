@@ -21,7 +21,7 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         shell: bash
         run: |
-          echo secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY
+          echo ${ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }
           
           #export COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}
           #coverity scan \
