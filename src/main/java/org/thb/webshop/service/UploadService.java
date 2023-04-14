@@ -81,7 +81,7 @@ public class UploadService implements Runnable  {
 
 
 	public String test(Object o) {
-		if (o == null)
+		if (o != null)
 			return o.toString().toLowerCase();
 		else
 			return "null-object";
