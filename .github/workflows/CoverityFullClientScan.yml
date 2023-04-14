@@ -33,23 +33,25 @@ jobs:
             -o commit.connect.url=${{ secrets.COVERITY_CONNECT_LOCAL_URL }} \
             -o commit.connect.stream=${COVERITY_CONNECT_STREAM_NAME} \
             -o commit.connect.version=${GITHUB_SHA} \
-           -o commit.connect.description="GitHub Workflow ${GITHUB_WORKFLOW} for ${GITHUB_REPOSITORY}"
+            -o commit.connect.description="GitHub Workflow ${GITHUB_WORKFLOW} for ${GITHUB_REPOSITORY}"
 
           coverity list > coverity.capture-file-listing.txt
           cat coverity.capture-file-listing.txt 
           cov-format-errors --dir idir --json-output-v7 coverity-results.json
 
-      - name: Archive File Capture Listing
+      - name: Archive Coverity File Listing
         uses: actions/upload-artifact@v3
         with:
           name: coverity-catpure-file-listing
           path: coverity.capture-file-listing.txt
 
-      - name: Archive Coverity Summary
+      - name: Archive Coverity Scan Info
         uses: actions/upload-artifact@v3
         with:
           name: coverity-summary
-          path: idir/output/summary.txt
+          path: |
+            idir/output/summary.txt
+            coverity-results.json
 
       - name: Get Pull Request Changeset
         if: ${{ github.event_name == 'pull_request' }}
