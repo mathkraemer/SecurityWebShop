@@ -65,7 +65,6 @@ public class UploadService implements Runnable  {
 			
 			asyncContext.complete();
 		} catch (IOException e) {
-			// Todo May need fix
 			out.write("false");
 		} catch (ServletException e) {
 			out.write("false");
