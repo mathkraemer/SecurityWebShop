@@ -33,7 +33,7 @@ jobs:
             -o commit.connect.url=${{ secrets.COVERITY_CONNECT_LOCAL_URL }} \
             -o commit.connect.stream=${COVERITY_CONNECT_STREAM_NAME} \
             -o commit.connect.version=${GITHUB_SHA} \
-            -o commit.connect.description="GitHub Workflow ${GITHUB_WORKFLOW} for ${GITHUB_REPOSITORY}"
+            -o commit.connect.description="GitHub Workflow \'${GITHUB_WORKFLOW}\' for ${GITHUB_REPOSITORY}"
 
           coverity list > coverity.capture-file-listing.txt
           cat coverity.capture-file-listing.txt 
@@ -61,17 +61,24 @@ jobs:
       - name: Coverity Scan (Incremental analysis)
         if: ${{github.event_name == 'pull_request'}}
         run: |
-          export COVERITY_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${{ github.base_ref }}
+          ## Store access token in auth-key-file.
+          echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > ${COVERITY_CONNECT_AUTHENTICATION_FILE}
+          chmod go-rwx ${COVERITY_CONNECT_AUTHENTICATION_FILE}
+          ## Create lower case stream name.
+          COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${{ github.base_ref }}
+          COVERITY_CONNECT_STREAM_NAME=${COVERITY_CONNECT_STREAM_NAME,,}
+
           for changed_file in ${{ steps.changeset.outputs.added_modified }}; do
             echo ${changed_file} >> coverity-files-to-scan.txt
             echo "Scan changed file ${changed_file}."
           done
-          cov-capture --dir idir --project-dir .
-          cov-run-desktop --dir idir --strip-path `pwd` --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} --stream $COVERITY_STREAM_NAME --present-in-reference false \
+
+          coverity capture --dir idir
+          cov-run-desktop --dir idir --strip-path `pwd` --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} --stream $COVERITY_CONNECT_STREAM_NAME --present-in-reference false \
             --ignore-uncapturable-inputs true \
             --json-output-v7 coverity-results.json \
-            $COVERITY_CHECKERS \
             ${{ steps.changeset.outputs.added_modified }}
+
       - name: Coverity Pull Request Feedback
         uses: synopsys-sig/coverity-report-output-v7-json@v0.1.0
         with:
@@ -81,7 +88,7 @@ jobs:
           # If the following optional parameters are specified, the results from the JSON output will be
           # compared to the baseline issues in the specified project, and only NEW issues will be reported
           # in the pull request.
-          coverity-url: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
-          coverity-project-name: ${{ github.event.repository.name }}
-          coverity-username: test
-          coverity-password: test
+          #coverity-url: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
+          #coverity-project-name: ${{ github.event.repository.name }}
+          #coverity-username: test
+          #coverity-password: test
