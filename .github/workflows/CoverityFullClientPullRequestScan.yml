@@ -1,4 +1,4 @@
-name: Coverity Full Client Analysis
+name: Coverity FullClient PullRequest Analysis
 on:
   pull_request:
     branches: [ master, main ]
@@ -39,7 +39,7 @@ jobs:
           done
 
           coverity capture --dir ${COVERITY_LOCAL_IDIR}
-          
+
           cov-run-desktop --dir ${COVERITY_LOCAL_IDIR} --strip-path `pwd` \
             --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} --stream $COVERITY_CONNECT_STREAM_NAME --present-in-reference false \
             --ignore-uncapturable-inputs true \
