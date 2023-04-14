@@ -38,7 +38,7 @@ jobs:
             echo "Scan changed file ${changed_file}."
           done
 
-          coverity capture --dir ${COVERITY_LOCAL_IDIR}
+          #coverity capture --dir ${COVERITY_LOCAL_IDIR}
 
           cov-run-desktop --dir ${COVERITY_LOCAL_IDIR} --strip-path `pwd` \
             --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} --stream $COVERITY_CONNECT_STREAM_NAME --present-in-reference false \
