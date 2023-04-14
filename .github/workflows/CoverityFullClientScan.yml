@@ -23,7 +23,7 @@ jobs:
         run: |
           echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > coverity-connect.token
           export COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}
-          echo COVERITY_CONNECT_STREAM_NAME
+          echo $COVERITY_CONNECT_STREAM_NAME
           #coverity scan \
           #  -o commit.connect.url=${{ secrets.COVERITY_CONNECT_LOCAL_URL }} \
           #  -o commit.connect.stream=$COVERITY_CONNECT_STREAM_NAME \
