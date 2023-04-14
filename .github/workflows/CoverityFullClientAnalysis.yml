@@ -25,8 +25,8 @@ jobs:
         run: |
           #export COVERITY_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}
           export COVERITY_STREAM_NAME=securitywebshop
-          #cov-capture --dir idir --project-dir .
-          #cov-analyze --dir idir --strip-path `pwd` $COVERITY_CHECKERS
+          cov-capture --dir idir --project-dir .
+          cov-analyze --dir idir --strip-path `pwd` $COVERITY_CHECKERS
           cov-commit-defects --dir idir --ticker-mode none --url ${{ secrets.COVERITY_LOCAL_URL }} --on-new-cert trust --stream \
               $COVERITY_STREAM_NAME --scm git --description "GitHub Workflow $GITHUB_WORKFLOW for $GITHUB_REPO" --version $GITHUB_SHA
           cov-format-errors --dir idir --json-output-v7 coverity-results.json
