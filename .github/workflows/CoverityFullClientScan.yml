@@ -21,16 +21,18 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         shell: bash
         run: |
+          ## Store access token in auth-key-file.
           echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > coverity-connect.token
+          ## Create lower case stream name.
           COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}
           COVERITY_CONNECT_STREAM_NAME=${COVERITY_CONNECT_STREAM_NAME,,}
-          echo $COVERITY_CONNECT_STREAM_NAME
-          #coverity scan \
-          #  -o commit.connect.url=${{ secrets.COVERITY_CONNECT_LOCAL_URL }} \
-          #  -o commit.connect.stream=$COVERITY_CONNECT_STREAM_NAME \
-          #  -o commit.connect.version=$GITHUB_SHA \
-          # -o commit.connect.description="GitHub Workflow ${GITHUB_WORKFLOW} for ${GITHUB_REPOSITORY}"
-          #cov-format-errors --dir idir --json-output-v7 coverity-results.json
+
+          coverity scan \
+            -o commit.connect.url=${{ secrets.COVERITY_CONNECT_LOCAL_URL }} \
+            -o commit.connect.stream=${COVERITY_CONNECT_STREAM_NAME} \
+            -o commit.connect.version=${GITHUB_SHA} \
+           -o commit.connect.description="GitHub Workflow ${GITHUB_WORKFLOW} for ${GITHUB_REPOSITORY}"
+          cov-format-errors --dir idir --json-output-v7 coverity-results.json
 
 
       - name: Get Pull Request Changeset
