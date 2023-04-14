@@ -11,10 +11,8 @@ jobs:
     runs-on: self-hosted
     
     env:
-      COVERITY_CHECKERS: --webapp-security
-      COVERITY_URL: ${{ secrets.COVERITY_LOCAL_URL }}
-      COV_USER: ${{ secrets.COVERITY_LOCAL_USER }}
-      COVERITY_PASSPHRASE: ${{ secrets.COVERITY_LOCAL_PASSPHRASE }}
+      COVERITY_CONNECT_URL: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
+      COVERITY_CONNECT_AUTHENTICATION_KEY: ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }}
 
     steps:
       - uses: actions/checkout@v3
@@ -23,13 +21,13 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         shell: bash
         run: |
-          export COVERITY_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}
-          echo $COVERITY_STREAM_NAME
-          export COVERITY_STREAM_NAME=securitywebshop
-          cov-capture --dir idir --project-dir .
-          cov-analyze --dir idir --strip-path `pwd` $COVERITY_CHECKERS
-          cov-commit-defects --dir idir --ticker-mode none --url ${{ secrets.COVERITY_LOCAL_URL }} --on-new-cert trust --stream \
-              $COVERITY_STREAM_NAME --scm git --description "GitHub Workflow $GITHUB_WORKFLOW for $GITHUB_REPOSITORY" --version $GITHUB_SHA
+          echo ${secrets.COVERITY_LOCAL_ACCESS_TOKEN} > coverity-connect.token
+          export COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}
+          coverity scan \
+            -o commit.connect.url=${{ secrets.COVERITY_LOCAL_URL }} \
+            -o commit.connect.stream=$COVERITY_CONNECT_STREAM_NAME \
+            -o commit.connect.version=$GITHUB_SHA \
+            -o commit.connect.description="GitHub Workflow $GITHUB_WORKFLOW for $GITHUB_REPOSITORY"
           cov-format-errors --dir idir --json-output-v7 coverity-results.json
 
 

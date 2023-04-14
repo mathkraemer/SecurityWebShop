@@ -1,0 +1,30 @@
+# Coverity configuration file.
+# The schema is available here: <install-dir>/doc/configuration-schema.json
+# For help on individual settings:      coverity help config --setting <setting>
+# For a complete example configuration: coverity help config --show-all
+
+analyze:
+  location: local
+  jobs:
+    auto: true
+  callgraph-metrics: true
+  aggressiveness-level: low
+  checkers:
+    all: true
+    audit: true
+    webapp-security:
+      enabled: true
+      aggressiveness-level: medium
+    android-security: false
+
+
+commit:
+  connect:
+    url: http://coverity-connect-server:8080
+    auth-key-file: coverity-connect.token
+    on-new-cert: trust
+    project: SecurityWebShop
+    stream: securitywebshop
+    scm: git
+    
+    
