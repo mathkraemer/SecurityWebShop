@@ -55,10 +55,11 @@ jobs:
           # If the following optional parameters are specified, the results from the JSON output will be
           # compared to the baseline issues in the specified project, and only NEW issues will be reported
           # in the pull request.
-          #coverity-url: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
+          coverity-url: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
           #coverity-project-name: ${{ github.event.repository.name }}
-          #coverity-username: test
-          #coverity-password: test
+          coverity-project-name: SecurityWebShop
+          coverity-username: admin
+          coverity-password: coverity
 
       - name: Archive Coverity File Listing
         uses: actions/upload-artifact@v3
