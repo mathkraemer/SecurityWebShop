@@ -1,8 +1,5 @@
 name: Coverity Full Client Analysis
 on:
-  push:
-    branches: [ master, main ]
-
   pull_request:
     branches: [ master, main ]
 
@@ -17,41 +14,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Coverity Scan (Full analysis)
-        if: ${{ github.event_name != 'pull_request' }}
-        shell: bash
-        run: |
-          ## Store access token in auth-key-file.
-          echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > ${COVERITY_CONNECT_AUTHENTICATION_FILE}
-          chmod go-rwx ${COVERITY_CONNECT_AUTHENTICATION_FILE}
-          ## Create lower case stream name.
-          COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}
-          COVERITY_CONNECT_STREAM_NAME=${COVERITY_CONNECT_STREAM_NAME,,}
-
-          coverity scan \
-            -o commit.connect.url=${{ secrets.COVERITY_CONNECT_LOCAL_URL }} \
-            -o commit.connect.stream=${COVERITY_CONNECT_STREAM_NAME} \
-            -o commit.connect.version=${GITHUB_SHA} \
-            -o commit.connect.description="GitHub Workflow \'${GITHUB_WORKFLOW}\' for ${GITHUB_REPOSITORY}"
-
-          coverity list > coverity.capture-file-listing.txt
-          cat coverity.capture-file-listing.txt 
-          cov-format-errors --dir idir --json-output-v7 coverity-results.json
-
-      - name: Archive Coverity File Listing
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverity-catpure-file-listing
-          path: coverity.capture-file-listing.txt
-
-      - name: Archive Coverity Scan Info
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverity-summary
-          path: |
-            idir/output/summary.txt
-            coverity-results.json
 
       - name: Get Pull Request Changeset
         if: ${{ github.event_name == 'pull_request' }}
@@ -68,13 +30,18 @@ jobs:
           COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${{ github.base_ref }}
           COVERITY_CONNECT_STREAM_NAME=${COVERITY_CONNECT_STREAM_NAME,,}
 
+          COVERITY_LOCAL_IDIR=/tmp/coverity/${GITHUB_REPOSITORY##*/}/idir
+          echo Caching incremental results in ${COVERITY_LOCAL_IDIR}
+
           for changed_file in ${{ steps.changeset.outputs.added_modified }}; do
             echo ${changed_file} >> coverity-files-to-scan.txt
             echo "Scan changed file ${changed_file}."
           done
 
-          coverity capture --dir idir
-          cov-run-desktop --dir idir --strip-path `pwd` --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} --stream $COVERITY_CONNECT_STREAM_NAME --present-in-reference false \
+          coverity capture --dir ${COVERITY_LOCAL_IDIR}
+          
+          cov-run-desktop --dir ${COVERITY_LOCAL_IDIR} --strip-path `pwd` \
+            --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} --stream $COVERITY_CONNECT_STREAM_NAME --present-in-reference false \
             --ignore-uncapturable-inputs true \
             --json-output-v7 coverity-results.json \
             ${{ steps.changeset.outputs.added_modified }}
@@ -92,3 +59,17 @@ jobs:
           #coverity-project-name: ${{ github.event.repository.name }}
           #coverity-username: test
           #coverity-password: test
+
+      - name: Archive Coverity File Listing
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverity-capture-file-listing
+          path: coverity-files-to-scan.txt
+
+      - name: Archive Coverity Scan Info
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverity-summary
+          path: |
+            idir/output/summary.txt
+            coverity-results.json
