@@ -34,18 +34,18 @@ jobs:
           set +e
           REFRESH_LOCAL_CACHE=0
           for file in ${{ steps.changeset.outputs.all_changed_files }}; do
-            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list && REFRESH_LOCAL_CACHE=$?
+            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list || REFRESH_LOCAL_CACHE=$?
             echo ${REFRESH_LOCAL_CACHE}
-            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*--${file}$')" list && REFRESH_LOCAL_CACHE=$?
+            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*--${file}$')" list || REFRESH_LOCAL_CACHE=$?
             echo ${REFRESH_LOCAL_CACHE}
-            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list && REFRESH_LOCAL_CACHE=$?
+            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list || REFRESH_LOCAL_CACHE=$?
             echo ${REFRESH_LOCAL_CACHE}
           done
           echo ----------- ${REFRESH_LOCAL_CACHE} ============
 
 
       - name: Coverity Scan (Incremental analysis)
-        if: ${{github.event_name == 'pull_request'}} && steps.changeset.outputs.any_changed == 'true' && false
+        if: github.event_name == 'pull_request' && steps.changeset.outputs.any_changed == 'true' && false
         run: |
           ## Store access token in auth-key-file.
           echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > ${COVERITY_CONNECT_AUTHENTICATION_FILE}
