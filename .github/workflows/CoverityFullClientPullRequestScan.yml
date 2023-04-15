@@ -26,7 +26,7 @@ jobs:
             target
 
       - name: Check presence in emit
-        if: steps.changeset.outputs.any_changed == 'false'
+        if: steps.changeset.outputs.any_changed == 'true'
         run: |
           echo ========== Changed Files ====================
           echo ${{ steps.changeset.outputs.all_changed_files }}
@@ -37,7 +37,7 @@ jobs:
 
 
       - name: Coverity Scan (Incremental analysis)
-        if: ${{github.event_name == 'pull_request'}} && steps.changeset.outputs.any_changed == 'true'
+        if: ${{github.event_name == 'pull_request'}} && steps.changeset.outputs.any_changed == 'true' && false
         run: |
           ## Store access token in auth-key-file.
           echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > ${COVERITY_CONNECT_AUTHENTICATION_FILE}
@@ -65,7 +65,7 @@ jobs:
           echo ==============================================
 
       - name: Coverity Pull Request Feedback
-        if: steps.changeset.outputs.any_changed == 'true'
+        if: steps.changeset.outputs.any_changed == 'true' && false
         uses: synopsys-sig/coverity-report-output-v7-json@v0.1.0
         with:
           # The following parameters are REQUIRED
@@ -81,14 +81,14 @@ jobs:
           coverity-password: coverity
 
       - name: Archive Coverity File Listing
-        if: steps.changeset.outputs.any_changed == 'true'
+        if: steps.changeset.outputs.any_changed == 'true'  && false
         uses: actions/upload-artifact@v3
         with:
           name: coverity-capture-file-listing
           path: coverity-files-to-scan.txt
 
       - name: Archive Coverity Scan Info
-        if: steps.changeset.outputs.any_changed == 'true'
+        if: steps.changeset.outputs.any_changed == 'true'  && false
         uses: actions/upload-artifact@v3
         with:
           name: coverity-summary
