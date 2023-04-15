@@ -41,11 +41,11 @@ jobs:
             echo Testing for cached file: ${file}
             cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list || REFRESH_LOCAL_CACHE=$?
           done
-          if [ ${REFRESH_LOCAL_CACHE} ]; then
+          if [ ${REFRESH_LOCAL_CACHE} -eq 0 ]; then
+            echo Changeset files already cached in Coverity emit directory: ${COVERITY_LOCAL_IDIR}
+          else
             echo Refreshing local Coverity emit directory: ${COVERITY_LOCAL_IDIR}
             coverity capture --dir ${COVERITY_LOCAL_IDIR}
-          else
-            echo Changeset files already cached in Coverity emit directory: ${COVERITY_LOCAL_IDIR}
           fi
 
 
