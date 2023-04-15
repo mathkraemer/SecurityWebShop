@@ -45,7 +45,8 @@ jobs:
             echo Changeset files already cached in Coverity emit directory: ${COVERITY_LOCAL_IDIR}
           else
             echo Refreshing local Coverity emit directory: ${COVERITY_LOCAL_IDIR}
-            coverity capture --dir ${COVERITY_LOCAL_IDIR}
+            # We don't need to run security-da when analyzing with cov-run-desktop, improves capture performance.
+            coverity capture --dir ${COVERITY_LOCAL_IDIR} -o capture.security-da=false
           fi
 
 
