@@ -26,7 +26,7 @@ jobs:
             target
 
       - name: Check presence in emit
-        if: steps.changeset.outputs.any_changed == 'true'
+        if: steps.changeset.outputs.any_changed == 'false'
         run: |
           echo ========== Changed Files ====================
           echo ${{ steps.changeset.outputs.all_changed_files }}
@@ -46,10 +46,9 @@ jobs:
           COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${{ github.base_ref }}
           COVERITY_CONNECT_STREAM_NAME=${COVERITY_CONNECT_STREAM_NAME,,}
 
-          COVERITY_LOCAL_IDIR=/tmp/coverity/${GITHUB_REPOSITORY##*/}/idir
           echo Caching incremental results in ${COVERITY_LOCAL_IDIR}
 
-          #coverity capture --dir ${COVERITY_LOCAL_IDIR}
+          coverity capture --dir ${COVERITY_LOCAL_IDIR}
 
           cov-run-desktop --dir ${COVERITY_LOCAL_IDIR} \
             --strip-path `pwd` \
