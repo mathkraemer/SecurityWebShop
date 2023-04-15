@@ -35,7 +35,8 @@ jobs:
             cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list
             echo $?
             cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*--${file}$')" list
-            echo $? 
+            echo $?
+            echo xxxxxxxxxxxxxxxx
           done
 
 
