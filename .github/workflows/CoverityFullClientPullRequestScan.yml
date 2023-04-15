@@ -87,13 +87,6 @@ jobs:
           coverity-username: admin
           coverity-password: coverity
 
-      - name: Archive Coverity File Listing
-        if: steps.changeset.outputs.any_changed == 'true'
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverity-capture-file-listing
-          path: coverity-files-to-scan.txt
-
       - name: Archive Coverity Scan Info
         if: steps.changeset.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v3
