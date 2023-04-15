@@ -51,7 +51,7 @@ jobs:
 
 
       - name: Coverity Scan (Incremental analysis)
-        if: github.event_name == 'pull_request' && steps.changeset.outputs.any_changed == 'true' && false
+        if: github.event_name == 'pull_request' && steps.changeset.outputs.any_changed == 'true'
         run: |
           ## Create lower case stream name.
           COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${{ github.base_ref }}
@@ -72,7 +72,7 @@ jobs:
           echo ==============================================
 
       - name: Coverity Pull Request Feedback
-        if: steps.changeset.outputs.any_changed == 'true' && false
+        if: steps.changeset.outputs.any_changed == 'true'
         uses: synopsys-sig/coverity-report-output-v7-json@v0.1.0
         with:
           # The following parameters are REQUIRED
@@ -88,14 +88,14 @@ jobs:
           coverity-password: coverity
 
       - name: Archive Coverity File Listing
-        if: steps.changeset.outputs.any_changed == 'true'  && false
+        if: steps.changeset.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: coverity-capture-file-listing
           path: coverity-files-to-scan.txt
 
       - name: Archive Coverity Scan Info
-        if: steps.changeset.outputs.any_changed == 'true'  && false
+        if: steps.changeset.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: coverity-summary
