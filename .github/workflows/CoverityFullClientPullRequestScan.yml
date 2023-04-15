@@ -9,6 +9,7 @@ jobs:
     
     env:
       COVERITY_CONNECT_URL: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
+      COVERITY_LOCAL_IDIR: /tmp/coverity/${GITHUB_REPOSITORY##*/}/idir
       COVERITY_CONNECT_AUTHENTICATION_KEY: ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }}
       COVERITY_CONNECT_AUTHENTICATION_FILE: coverity-connect.token
 
@@ -23,17 +24,17 @@ jobs:
           files_ignore: |
             .github
             target
-     
-      - name: Generate Changeset File List
+
+      - name: Check presence in emit
+        if: steps.changeset.outputs.any_changed == 'true'
         run: |
-          touch changeset.lst
-          for changed_file in ${{ steps.changeset.outputs.all_changed_files }}; do
-            echo ${changed_file} >> changeset.lst
+          echo ========== Changed Files ====================
+          echo ${{ steps.changeset.outputs.all_changed_files }}
+          echo =============================================
+          for file in ${{ steps.changeset.outputs.all_changed_files }}; do
+            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} -tu "file('${file}')" list 
           done
-          echo ======= Changed Fileset in Pull Request =========
-          cat changeset.lst
-          echo =================================================
-          echo  ${{ steps.changeset.outputs.all_changed_files }}
+
 
       - name: Coverity Scan (Incremental analysis)
         if: ${{github.event_name == 'pull_request'}} && steps.changeset.outputs.any_changed == 'true'
