@@ -31,7 +31,7 @@ jobs:
           echo ========== Changed Files ====================
           echo ${{ steps.changeset.outputs.all_changed_files }}
           echo =============================================
-          set -e
+          set +e
           for file in ${{ steps.changeset.outputs.all_changed_files }}; do
             cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list
             echo $?
