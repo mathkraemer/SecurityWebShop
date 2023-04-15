@@ -24,18 +24,18 @@ jobs:
             .github
             target
      
-      - name: Changed File List
+      - name: Generate Changeset File List
         run: |
+          touch changeset.lst
           for changed_file in ${{ steps.changeset.outputs.all_changed_files }}; do
-            echo ${changed_file} >> coverity-files-to-scan.txt
-            echo "Scan changed file ${changed_file}."
+            echo ${changed_file} >> changeset.lst
           done
-          echo --------------------------------------
-          cat coverity-files-to-scan.txt
-          echo --------------------------------------
+          echo ======= Changed Fileset in Pull Request =========
+          cat changeset.lst
+          echo =================================================
 
       - name: Coverity Scan (Incremental analysis)
-        if: ${{github.event_name == 'no_pull_request'}}
+        if: ${{github.event_name == 'pull_request'}} && steps.changeset.outputs.any_changed == 'true'
         run: |
           ## Store access token in auth-key-file.
           echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > ${COVERITY_CONNECT_AUTHENTICATION_FILE}
@@ -47,21 +47,19 @@ jobs:
           COVERITY_LOCAL_IDIR=/tmp/coverity/${GITHUB_REPOSITORY##*/}/idir
           echo Caching incremental results in ${COVERITY_LOCAL_IDIR}
 
-          for changed_file in ${{ steps.changeset.outputs.added_modified }}; do
-            echo ${changed_file} >> coverity-files-to-scan.txt
-            echo "Scan changed file ${changed_file}."
-          done
-
           #coverity capture --dir ${COVERITY_LOCAL_IDIR}
 
-          cov-run-desktop --dir ${COVERITY_LOCAL_IDIR} --strip-path `pwd` \
-            --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} --stream $COVERITY_CONNECT_STREAM_NAME --present-in-reference false \
+          cov-run-desktop --dir ${COVERITY_LOCAL_IDIR} \
+            --strip-path `pwd` \
+            --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} \
+            --stream $COVERITY_CONNECT_STREAM_NAME \
+            --present-in-reference false \
             --ignore-uncapturable-inputs true \
             --json-output-v7 coverity-results.json \
-            ${{ steps.changeset.outputs.added_modified }}
+            ${{ steps.changeset.outputs.all_changed_files }}
 
       - name: Coverity Pull Request Feedback
-        if: ${{ false }}
+        if: steps.changeset.outputs.any_changed == 'true'
         uses: synopsys-sig/coverity-report-output-v7-json@v0.1.0
         with:
           # The following parameters are REQUIRED
@@ -77,12 +75,14 @@ jobs:
           coverity-password: coverity
 
       - name: Archive Coverity File Listing
+        if: steps.changeset.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: coverity-capture-file-listing
           path: coverity-files-to-scan.txt
 
       - name: Archive Coverity Scan Info
+        if: steps.changeset.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: coverity-summary
