@@ -62,7 +62,7 @@ jobs:
             --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} \
             --stream $COVERITY_CONNECT_STREAM_NAME \
             --reference-snapshot latest \
-            --present-in-reference true \
+            --present-in-reference false \
             --ignore-uncapturable-inputs true \
             --json-output-v7 coverity-results.json \
             ${{ steps.changeset.outputs.all_changed_files }}
