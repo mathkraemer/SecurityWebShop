@@ -32,13 +32,16 @@ jobs:
           echo ${{ steps.changeset.outputs.all_changed_files }}
           echo =============================================
           set +e
+          REFRESH_LOCAL_CACHE=0
           for file in ${{ steps.changeset.outputs.all_changed_files }}; do
-            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list
-            echo $?
-            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*--${file}$')" list
-            echo $?
+            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list && REFRESH_LOCAL_CACHE=$?
+            echo ${REFRESH_LOCAL_CACHE}
+            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*--${file}$')" list && REFRESH_LOCAL_CACHE=$?
+            echo ${REFRESH_LOCAL_CACHE}
+            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list && REFRESH_LOCAL_CACHE=$?
+            echo ${REFRESH_LOCAL_CACHE}
           done
-          echo xxxxxxxxxxxxxxxx
+          echo ----------- ${REFRESH_LOCAL_CACHE} ============
 
 
       - name: Coverity Scan (Incremental analysis)
