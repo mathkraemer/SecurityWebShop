@@ -33,6 +33,7 @@ jobs:
           echo ======= Changed Fileset in Pull Request =========
           cat changeset.lst
           echo =================================================
+          echo  ${{ steps.changeset.outputs.all_changed_files }}
 
       - name: Coverity Scan (Incremental analysis)
         if: ${{github.event_name == 'pull_request'}} && steps.changeset.outputs.any_changed == 'true'
@@ -58,6 +59,10 @@ jobs:
             --ignore-uncapturable-inputs true \
             --json-output-v7 coverity-results.json \
             ${{ steps.changeset.outputs.all_changed_files }}
+
+          echo =========== c-r-d results ====================
+          cat coverity-results.json
+          echo ==============================================
 
       - name: Coverity Pull Request Feedback
         if: steps.changeset.outputs.any_changed == 'true'
