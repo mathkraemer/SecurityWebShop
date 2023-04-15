@@ -25,7 +25,7 @@ jobs:
             .github
             target
 
-      - name: Coverity New File Capture
+      - name: Coverity New File Capture Caching
         if: steps.changeset.outputs.any_changed == 'true'
         run: |
           ## Store access token in auth-key-file.
