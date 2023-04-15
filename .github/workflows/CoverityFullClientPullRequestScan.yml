@@ -19,6 +19,10 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         id: changeset
         uses: tj-actions/changed-files@v35.8.0
+        with:
+          files_ignore: |
+            .github
+            target
      
       - name: Changed File List
         run: |
