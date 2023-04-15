@@ -9,7 +9,7 @@ jobs:
     
     env:
       COVERITY_CONNECT_URL: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
-      COVERITY_LOCAL_IDIR: ${{ /tmp/coverity/${GITHUB_REPOSITORY##*/}/idir }}
+      COVERITY_LOCAL_IDIR: /tmp/coverity/${{github.repository}}/idir
       COVERITY_CONNECT_AUTHENTICATION_KEY: ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }}
       COVERITY_CONNECT_AUTHENTICATION_FILE: coverity-connect.token
 
