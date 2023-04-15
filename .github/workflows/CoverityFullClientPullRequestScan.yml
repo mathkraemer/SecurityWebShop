@@ -36,8 +36,8 @@ jobs:
             echo $?
             cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*--${file}$')" list
             echo $?
-            echo xxxxxxxxxxxxxxxx
           done
+          echo xxxxxxxxxxxxxxxx
 
 
       - name: Coverity Scan (Incremental analysis)
