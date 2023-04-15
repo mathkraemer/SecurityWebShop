@@ -34,12 +34,8 @@ jobs:
           set -e
           REFRESH_LOCAL_CACHE=0
           for file in ${{ steps.changeset.outputs.all_changed_files }}; do
+            echo Testing for cached file: ${file}
             cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list || REFRESH_LOCAL_CACHE=$?
-            echo ${REFRESH_LOCAL_CACHE}
-            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*--${file}$')" list || REFRESH_LOCAL_CACHE=$?
-            echo ${REFRESH_LOCAL_CACHE}
-            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-patter "file('.*${file}$')" list || REFRESH_LOCAL_CACHE=$?
-            echo ${REFRESH_LOCAL_CACHE}
           done
           echo ----------- ${REFRESH_LOCAL_CACHE} ============
 
