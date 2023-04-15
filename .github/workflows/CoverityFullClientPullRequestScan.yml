@@ -32,9 +32,9 @@ jobs:
           echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > ${COVERITY_CONNECT_AUTHENTICATION_FILE}
           chmod go-rwx ${COVERITY_CONNECT_AUTHENTICATION_FILE}
 
-          echo ========== Changed Files ====================
+          echo ========== Files Changeset ====================
           echo ${{ steps.changeset.outputs.all_changed_files }}
-          echo =============================================
+          echo ===============================================
 
           REFRESH_LOCAL_CACHE=0
           for file in ${{ steps.changeset.outputs.all_changed_files }}; do
