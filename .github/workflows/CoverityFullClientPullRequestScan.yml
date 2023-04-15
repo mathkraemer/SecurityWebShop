@@ -38,7 +38,7 @@ jobs:
             echo ${REFRESH_LOCAL_CACHE}
             cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*--${file}$')" list || REFRESH_LOCAL_CACHE=$?
             echo ${REFRESH_LOCAL_CACHE}
-            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list || REFRESH_LOCAL_CACHE=$?
+            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-patter "file('.*${file}$')" list || REFRESH_LOCAL_CACHE=$?
             echo ${REFRESH_LOCAL_CACHE}
           done
           echo ----------- ${REFRESH_LOCAL_CACHE} ============
