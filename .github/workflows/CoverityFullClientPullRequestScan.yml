@@ -68,7 +68,7 @@ jobs:
             --exit1-if-defects true \
             ${{ steps.changeset.outputs.all_changed_files }}
 
-          echo =========== c-r-d results ====================
+          echo =========== c-r-d results ====================ls 
           cat coverity-results.json
           echo ==============================================
 
@@ -85,8 +85,9 @@ jobs:
           coverity-url: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
           #coverity-project-name: ${{ github.event.repository.name }}
           coverity-project-name: SecurityWebShop
-          coverity-username: admin
-          coverity-password: coverity
+          # TODO: replace from auth-key.
+          coverity-username: ${{ fromJSON(env.COVERITY_CONNECT_AUTHENTICATION_FILE).username }}
+          coverity-password: ${{ fromJSON(env.COVERITY_CONNECT_AUTHENTICATION_FILE).key }}
 
       - name: Archive Coverity Scan Info
         if: steps.changeset.outputs.any_changed == 'true'
