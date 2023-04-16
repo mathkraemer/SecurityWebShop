@@ -72,6 +72,12 @@ jobs:
           cat coverity-results.json
           echo ==============================================
 
+      - name: Test Authentication
+        run: |
+          echo ${{ fromJSON(env.COVERITY_CONNECT_AUTHENTICATION_FILE) }}
+          echo =========================================================
+          echo ${{ fromJSON(env.COVERITY_CONNECT_AUTHENTICATION_FILE).username }}
+
       - name: Coverity Pull Request Feedback
         if: steps.changeset.outputs.any_changed == 'true'
         uses: synopsys-sig/coverity-report-output-v7-json@v0.1.0
