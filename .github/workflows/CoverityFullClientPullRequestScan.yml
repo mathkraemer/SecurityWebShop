@@ -75,7 +75,7 @@ jobs:
       - name: Test Authentication
         run: |
           ## Create lower case stream name.
-          echo ${{ env.COVERITY_CONNECT_AUTHENTICATION_FILE }} 
+          echo ${{ fromJson(env.COVERITY_CONNECT_AUTHENTICATION_FILE) }} 
           echo =========================================================
           #echo 
 
