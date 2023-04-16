@@ -74,7 +74,9 @@ jobs:
 
       - name: Test Authentication
         run: |
-          echo "COVERITY_CONNECT_USERNAME=$(jq .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})"
+          echo "COVERITY_CONNECT_USERNAME=$(jq .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
+          echo "COVERITY_CONNECT_KEY=$(jq .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
+          echo "COVERITY_CONNECT_KEY=$(jq .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})"
 
       - name: Coverity Pull Request Feedback
         if: steps.changeset.outputs.any_changed == 'false'
