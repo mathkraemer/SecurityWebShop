@@ -33,8 +33,8 @@ jobs:
           chmod go-rwx ${COVERITY_CONNECT_AUTHENTICATION_FILE}
 
           ## Store individual authkey fields in env (workaround for coverity-report-output-v7-json@v0.1.0 )
-          echo "COVERITY_CONNECT_USERNAME=$(jq .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
-          echo "COVERITY_CONNECT_KEY=$(jq .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
+          echo "COVERITY_CONNECT_USERNAME=$(jq -r .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
+          echo "COVERITY_CONNECT_KEY=$(jq -r .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
 
           ## Derive Coverity Connect Project and Stream names
           ## Connect project name:   GitHub Repo Name
@@ -50,8 +50,8 @@ jobs:
           echo ===================================================
           echo Project: $COVERITY_CONNECT_PROJECT_NAME
           echo Stream: $COVERITY_CONNECT_STREAM_NAME
-          echo User: $(jq .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})
-          echo Key: $(jq .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})
+          echo User: $(jq -r .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})
+          echo Key: $(jq -r .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})
           echo ===================================================
 
       - name: Coverity New File Capture Caching
