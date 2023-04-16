@@ -313,7 +313,7 @@ public class DataBaseUtil {
 		while(result.next()){
 			
 			Item item = new Item();
-		
+		    
 			item.setId(result.getLong("id"));
 			item.setTitle(result.getString("title"));
 			item.setDescription(result.getString("description"));
