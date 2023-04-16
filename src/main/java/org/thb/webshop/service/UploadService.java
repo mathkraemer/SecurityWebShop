@@ -80,7 +80,7 @@ public class UploadService implements Runnable  {
 
 	int testme(String ts){
 		int len = 0;
-		if (ts != null){
+		if (ts == null){
 			len = ts.length();
 		}
 		return len;
