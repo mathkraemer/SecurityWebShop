@@ -74,10 +74,7 @@ jobs:
 
       - name: Test Authentication
         run: |
-          ## Create lower case stream name.
-          echo ${{ fromJson(env.COVERITY_CONNECT_AUTHENTICATION_FILE) }} 
-          echo =========================================================
-          #echo 
+          echo "COVERITY_CONNECT_USERNAME=$(jq .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})"
 
       - name: Coverity Pull Request Feedback
         if: steps.changeset.outputs.any_changed == 'false'
