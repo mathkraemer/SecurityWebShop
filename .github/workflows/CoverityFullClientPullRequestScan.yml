@@ -90,7 +90,7 @@ jobs:
             ${{ steps.changeset.outputs.all_changed_files }}
 
           echo =========== c-r-d results ==================== 
-          cat ${COVERITY_LOCAL_IDIR}\output\summary.txt
+          cat ${COVERITY_LOCAL_IDIR}/output/summary.txt
           echo ==============================================
 
       - name: Coverity Pull Request Feedback
