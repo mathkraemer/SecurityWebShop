@@ -12,7 +12,7 @@ public class TestService implements Runnable {
         
         int len;
 
-        if (group == null){
+        if (group != null){
             len = group.length();
         } else {
             len = 0;
