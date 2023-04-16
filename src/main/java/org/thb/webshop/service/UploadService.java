@@ -65,7 +65,6 @@ public class UploadService implements Runnable  {
 			
 			asyncContext.complete();
 		} catch (IOException e) {
-			//Todo: may need fix
 			out.write("false");
 		} catch (ServletException e) {
 			out.write("false");
@@ -78,13 +77,4 @@ public class UploadService implements Runnable  {
 			}
 		}	
 	}
-
-
-	public String test(Object o) {
-		if (o != null)
-			return o.toString().toLowerCase();
-		else
-			return "null-object";
-	}
-
 }
