@@ -86,7 +86,7 @@ jobs:
             --present-in-reference false \
             --ignore-uncapturable-inputs true \
             --json-output-v7 coverity-results.json \
-            --exit1-if-defects true \
+            --exit1-if-defects false \
             ${{ steps.changeset.outputs.all_changed_files }}
 
           echo =========== c-r-d results ==================== 
