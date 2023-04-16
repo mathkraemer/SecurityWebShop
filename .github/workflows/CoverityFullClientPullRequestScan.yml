@@ -89,8 +89,8 @@ jobs:
             --exit1-if-defects true \
             ${{ steps.changeset.outputs.all_changed_files }}
 
-          echo =========== c-r-d results ====================ls 
-          cat coverity-results.json
+          echo =========== c-r-d results ==================== 
+          cat ${COVERITY_LOCAL_IDIR}\output\summary.txt
           echo ==============================================
 
       - name: Coverity Pull Request Feedback
@@ -114,5 +114,6 @@ jobs:
         with:
           name: coverity-summary
           path: |
-            idir/output/summary.txt
+            ${{env.COVERITY_LOCAL_IDIR}}/output/summary.txt
+            ${{env.COVERITY_LOCAL_IDIR}}/output/cov-run-desktop-log.txt
             coverity-results.json
