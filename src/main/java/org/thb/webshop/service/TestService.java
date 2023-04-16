@@ -2,7 +2,7 @@ package org.thb.webshop.service;
 
 public class TestService implements Runnable {
 
-    private String group = 'unknown';
+    private String group = "unknown";
 
     public TestService(String testgroup){
         this.group = testgroup;
