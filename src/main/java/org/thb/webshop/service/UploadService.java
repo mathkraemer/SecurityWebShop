@@ -77,5 +77,4 @@ public class UploadService implements Runnable  {
 			}
 		}	
 	}
-
 }

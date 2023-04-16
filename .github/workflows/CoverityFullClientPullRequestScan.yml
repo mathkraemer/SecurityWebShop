@@ -4,11 +4,12 @@ on:
     branches: [ master, main ]
 
 jobs:
-  build:
+  pr-scan:
     runs-on: self-hosted
     
     env:
       COVERITY_CONNECT_URL: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
+      COVERITY_LOCAL_IDIR: /tmp/coverity/${{github.repository}}/idir
       COVERITY_CONNECT_AUTHENTICATION_KEY: ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }}
       COVERITY_CONNECT_AUTHENTICATION_FILE: coverity-connect.token
 
@@ -18,35 +19,82 @@ jobs:
       - name: Get Pull Request Changeset
         if: ${{ github.event_name == 'pull_request' }}
         id: changeset
-        uses: jitterbit/get-changed-files@v1
+        uses: tj-actions/changed-files@v35.8.0
+        with:
+          files_ignore: |
+            .github
+            target
 
-      - name: Coverity Scan (Incremental analysis)
-        if: ${{github.event_name == 'pull_request'}}
+      - name: Coverity Connect Authentication
+        if: steps.changeset.outputs.any_changed == 'true'
         run: |
           ## Store access token in auth-key-file.
           echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > ${COVERITY_CONNECT_AUTHENTICATION_FILE}
           chmod go-rwx ${COVERITY_CONNECT_AUTHENTICATION_FILE}
-          ## Create lower case stream name.
+
+          ## Store individual authkey fields in env (workaround for coverity-report-output-v7-json@v0.1.0 )
+          echo "COVERITY_CONNECT_USERNAME=$(jq -r .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
+          echo "COVERITY_CONNECT_KEY=$(jq -r .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
+
+          ## Derive Coverity Connect Project and Stream names
+          ## Connect project name:   GitHub Repo Name
+          ## Connect stream name:    GitHub Repo Name + '-' + GitHub Target branch (all small caps)
+          
+          COVERITY_CONNECT_PROJECT_NAME=${GITHUB_REPOSITORY##*/}
           COVERITY_CONNECT_STREAM_NAME=${GITHUB_REPOSITORY##*/}-${{ github.base_ref }}
           COVERITY_CONNECT_STREAM_NAME=${COVERITY_CONNECT_STREAM_NAME,,}
 
-          COVERITY_LOCAL_IDIR=/tmp/coverity/${GITHUB_REPOSITORY##*/}/idir
-          echo Caching incremental results in ${COVERITY_LOCAL_IDIR}
+          echo "COVERITY_CONNECT_PROJECT_NAME=$COVERITY_CONNECT_PROJECT_NAME" >> $GITHUB_ENV
+          echo "COVERITY_CONNECT_STREAM_NAME=$COVERITY_CONNECT_STREAM_NAME"   >> $GITHUB_ENV
 
-          for changed_file in ${{ steps.changeset.outputs.added_modified }}; do
-            echo ${changed_file} >> coverity-files-to-scan.txt
-            echo "Scan changed file ${changed_file}."
+          echo ===================================================
+          echo Project: $COVERITY_CONNECT_PROJECT_NAME
+          echo Stream: $COVERITY_CONNECT_STREAM_NAME
+          echo User: $(jq -r .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})
+          echo Key: $(jq -r .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})
+          echo ===================================================
+
+      - name: Coverity New File Capture Caching
+        if: steps.changeset.outputs.any_changed == 'true'
+        run: |
+          echo ========== Files Changeset ====================
+          echo ${{ steps.changeset.outputs.all_changed_files }}
+          echo ===============================================
+
+          REFRESH_LOCAL_CACHE=0
+          for file in ${{ steps.changeset.outputs.all_changed_files }}; do
+            echo Testing for cached file: ${file}
+            cov-manage-emit --dir ${COVERITY_LOCAL_IDIR} --tu-pattern "file('.*${file}$')" list || REFRESH_LOCAL_CACHE=$?
           done
+          if [ ${REFRESH_LOCAL_CACHE} -eq 0 ]; then
+            echo Changeset files already cached in Coverity emit directory: ${COVERITY_LOCAL_IDIR}
+          else
+            echo Refreshing local Coverity emit directory: ${COVERITY_LOCAL_IDIR}
+            # We don't need to run security-da when analyzing with cov-run-desktop, improves capture performance.
+            coverity capture --dir ${COVERITY_LOCAL_IDIR} -o capture.security-da=false
+          fi
 
-          coverity capture --dir ${COVERITY_LOCAL_IDIR}
 
-          cov-run-desktop --dir ${COVERITY_LOCAL_IDIR} --strip-path `pwd` \
-            --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} --stream $COVERITY_CONNECT_STREAM_NAME --present-in-reference false \
+      - name: Coverity Scan (Incremental analysis)
+        if: github.event_name == 'pull_request' && steps.changeset.outputs.any_changed == 'true'
+        run: |
+          cov-run-desktop --dir ${COVERITY_LOCAL_IDIR} \
+            --strip-path `pwd` \
+            --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} \
+            --stream ${{ env.COVERITY_CONNECT_STREAM_NAME }}\
+            --reference-snapshot latest \
+            --present-in-reference false \
             --ignore-uncapturable-inputs true \
             --json-output-v7 coverity-results.json \
-            ${{ steps.changeset.outputs.added_modified }}
+            --exit1-if-defects false \
+            ${{ steps.changeset.outputs.all_changed_files }}
+
+          echo =========== c-r-d results ==================== 
+          cat ${COVERITY_LOCAL_IDIR}/output/summary.txt
+          echo ==============================================
 
       - name: Coverity Pull Request Feedback
+        if: steps.changeset.outputs.any_changed == 'true'
         uses: synopsys-sig/coverity-report-output-v7-json@v0.1.0
         with:
           # The following parameters are REQUIRED
@@ -55,21 +103,17 @@ jobs:
           # If the following optional parameters are specified, the results from the JSON output will be
           # compared to the baseline issues in the specified project, and only NEW issues will be reported
           # in the pull request.
-          #coverity-url: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
-          #coverity-project-name: ${{ github.event.repository.name }}
-          #coverity-username: test
-          #coverity-password: test
-
-      - name: Archive Coverity File Listing
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverity-capture-file-listing
-          path: coverity-files-to-scan.txt
+          coverity-url: ${{ secrets.COVERITY_CONNECT_LOCAL_URL }}
+          coverity-project-name: ${{env.COVERITY_CONNECT_PROJECT_NAME}}
+          coverity-username: ${{env.COVERITY_CONNECT_USERNAME}}
+          coverity-password: ${{env.COVERITY_CONNECT_KEY}}
 
       - name: Archive Coverity Scan Info
+        if: steps.changeset.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: coverity-summary
           path: |
-            idir/output/summary.txt
+            ${{env.COVERITY_LOCAL_IDIR}}/output/summary.txt
+            ${{env.COVERITY_LOCAL_IDIR}}/output/cov-run-desktop-log.txt
             coverity-results.json
