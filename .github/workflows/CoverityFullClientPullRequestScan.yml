@@ -50,8 +50,8 @@ jobs:
           echo ===================================================
           echo Project: $COVERITY_CONNECT_PROJECT_NAME
           echo Stream: $COVERITY_CONNECT_STREAM_NAME
-          echo User: $COVERITY_CONNECT_USERNAME
-          echo Key: $COVERITY_CONNECT_KEY
+          echo User: $(jq .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})
+          echo Key: $(jq .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})
           echo ===================================================
 
       - name: Coverity New File Capture Caching
