@@ -77,4 +77,8 @@ public class UploadService implements Runnable  {
 			}
 		}	
 	}
+
+	void test(){
+		// Do nothing
+	}
 }
