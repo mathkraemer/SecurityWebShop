@@ -17,6 +17,7 @@ public class TestService implements Runnable {
         } else {
             len = 0;
         }
+        
         len++;
     }
     
