@@ -25,13 +25,20 @@ jobs:
             .github
             target
 
-      - name: Coverity New File Capture Caching
+      - name: Setup Coverity Connect Authentication
         if: steps.changeset.outputs.any_changed == 'true'
         run: |
           ## Store access token in auth-key-file.
           echo ${{ secrets.COVERITY_CONNECT_LOCAL_AUTHENTICATION_KEY }} | base64 -d > ${COVERITY_CONNECT_AUTHENTICATION_FILE}
           chmod go-rwx ${COVERITY_CONNECT_AUTHENTICATION_FILE}
 
+          ## Store individual authkey fields in env (workaround for coverity-report-output-v7-json@v0.1.0 )
+          echo "COVERITY_CONNECT_USERNAME=$(jq .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
+          echo "COVERITY_CONNECT_KEY=$(jq .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
+
+      - name: Coverity New File Capture Caching
+        if: steps.changeset.outputs.any_changed == 'true'
+        run: |
           echo ========== Files Changeset ====================
           echo ${{ steps.changeset.outputs.all_changed_files }}
           echo ===============================================
@@ -74,12 +81,11 @@ jobs:
 
       - name: Test Authentication
         run: |
-          echo "COVERITY_CONNECT_USERNAME=$(jq .username ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
-          echo "COVERITY_CONNECT_KEY=$(jq .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})" >> $GITHUB_ENV
-          echo "COVERITY_CONNECT_KEY=$(jq .key ${COVERITY_CONNECT_AUTHENTICATION_FILE})"
+          echo ${{env.COVERITY_CONNECT_USERNAME}}
+          echo ${{env.COVERITY_CONNECT_KEY}}
 
       - name: Coverity Pull Request Feedback
-        if: steps.changeset.outputs.any_changed == 'false'
+        if: steps.changeset.outputs.any_changed == 'true'
         uses: synopsys-sig/coverity-report-output-v7-json@v0.1.0
         with:
           # The following parameters are REQUIRED
@@ -92,8 +98,8 @@ jobs:
           #coverity-project-name: ${{ github.event.repository.name }}
           coverity-project-name: SecurityWebShop
           # TODO: replace from auth-key.
-          coverity-username: ${{ fromJSON(env.COVERITY_CONNECT_AUTHENTICATION_FILE).username }}
-          coverity-password: ${{ fromJSON(env.COVERITY_CONNECT_AUTHENTICATION_FILE).key }}
+          coverity-username: ${{env.COVERITY_CONNECT_USERNAME}}
+          coverity-password: echo ${{env.COVERITY_CONNECT_KEY}}
 
       - name: Archive Coverity Scan Info
         if: steps.changeset.outputs.any_changed == 'true'
