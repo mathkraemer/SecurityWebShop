@@ -2,3 +2,6 @@
 .synopsys/
 target/
 .idea/
+
+# Synopsys standard exclusions
+.bridge/

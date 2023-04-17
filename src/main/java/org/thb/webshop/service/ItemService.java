@@ -103,12 +103,4 @@ public class ItemService {
 			return Response.status(400).entity("error item to create is null:").build();
 		}
 	}
-
-	public String testme(Object o){
-		if (o != null){
-			return o.toString();
-		} else {
-			return "null-ref";
-		}
-	}
 }
