@@ -10,6 +10,7 @@ analyze:
   callgraph-metrics: true
   aggressiveness-level: low
   checkers:
+    default: false
     all: false
     audit: false
     webapp-security:
