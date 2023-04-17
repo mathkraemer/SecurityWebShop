@@ -11,10 +11,10 @@ analyze:
   aggressiveness-level: low
   checkers:
     all: true
-    audit: false
+    audit: true
     webapp-security:
-      enabled: false
-      #aggressiveness-level: medium
+      enabled: true
+      aggressiveness-level: medium
     android-security: false
 
 
