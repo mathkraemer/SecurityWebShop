@@ -10,15 +10,11 @@ analyze:
   callgraph-metrics: true
   aggressiveness-level: low
   checkers:
-    default: false
-    all: false
-    audit: false
-    checker-config:
-      FORWARD_NULL:
-        enabled: true
+    all: true
+    audit: true
     webapp-security:
       enabled: false
-      aggressiveness-level: low
+      aggressiveness-level: medium
     android-security: false
 
 
