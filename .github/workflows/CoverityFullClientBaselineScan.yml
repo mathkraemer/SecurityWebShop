@@ -1,4 +1,4 @@
-name: Coverity FullClient Baseline Analysis
+name: Coverity Full-Client Baseline Analysis
 on:
   push:
     branches: [ master, main ]

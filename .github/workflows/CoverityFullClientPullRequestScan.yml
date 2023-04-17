@@ -1,4 +1,4 @@
-name: Coverity FullClient PullRequest Analysis
+name: Coverity Full-Client Pull-Request Analysis
 on:
   pull_request:
     branches: [ master, main ]
