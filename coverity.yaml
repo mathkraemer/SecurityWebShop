@@ -13,7 +13,7 @@ analyze:
     all: true
     audit: true
     webapp-security:
-      enabled: false
+      enabled: true
       aggressiveness-level: medium
     android-security: false
 
