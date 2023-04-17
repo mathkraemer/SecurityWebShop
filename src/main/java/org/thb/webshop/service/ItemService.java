@@ -105,7 +105,7 @@ public class ItemService {
 	}
 
 	public String testme(Object o){
-		if (o == null){
+		if (o != null){
 			return o.toString();
 		} else {
 			return "null-ref";
