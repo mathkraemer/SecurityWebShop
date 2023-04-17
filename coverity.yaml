@@ -6,7 +6,7 @@
 analyze:
   location: local
   jobs:
-    auto: true
+    #auto: true
   callgraph-metrics: true
   aggressiveness-level: low
   checkers:
