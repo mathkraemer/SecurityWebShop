@@ -82,7 +82,7 @@ jobs:
             --strip-path `pwd` \
             --url ${{ secrets.COVERITY_CONNECT_LOCAL_URL }} \
             --stream ${{ env.COVERITY_CONNECT_STREAM_NAME }}\
-            --auth-key-file ${{ env.COVERITY_CONNECT_AUTHENTICATION_FILE }}
+            --auth-key-file ${{ env.COVERITY_CONNECT_AUTHENTICATION_FILE }} \
             --reference-snapshot latest \
             --present-in-reference false \
             --ignore-uncapturable-inputs true \
