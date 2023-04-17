@@ -28,7 +28,7 @@ commit:
     auth-key-file: coverity-connect.token
     on-new-cert: trust
     project: SecurityWebShop
-    stream: securitywebshop
+    stream: securitywebshop-master
     scm: git
     
     
