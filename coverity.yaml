@@ -13,6 +13,9 @@ analyze:
     default: false
     all: false
     audit: false
+    checker-config:
+      FORWARD_NULL:
+        enabled: true
     webapp-security:
       enabled: false
       aggressiveness-level: low
