@@ -105,7 +105,7 @@ public class ItemService {
 	}
 
 	public String doitnow(Object o){
-		if (o == null)
+		if (o != null)
 			return "This is an " + o.toString() + "object";
 		else
 			return "Null object";
