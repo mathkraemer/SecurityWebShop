@@ -1,0 +1,27 @@
+name: Polaris GitHub Action Scan
+
+on:
+  push:
+    branches: [ master, main ]
+
+  # At this time, it is recommended to run Polaris only on pushes to main branches
+  # Pull request analysis will be supported by Polaris in the future
+  #pull_request:
+  #  branches: [ master, main ]
+
+jobs:
+  build:
+    #runs-on: ubuntu-latest
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Synopsys Action
+        uses: synopsys-sig/synopsys-action@v1.1.0
+        with:
+          polaris_serverUrl: ${{ secrets.POLARIS_POC_SERVER_URL }}
+          polaris_accessToken: ${{ secrets.POLARIS_POC_ACCESS_TOKEN }}
+          polaris_application_name: MK-SecurityWebShop
+          polaris_project_name: SecurityWebShop-CLI
+          polaris_assessment_types: SCA,SAST
