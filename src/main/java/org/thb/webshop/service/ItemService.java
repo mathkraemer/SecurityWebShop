@@ -103,4 +103,11 @@ public class ItemService {
 			return Response.status(400).entity("error item to create is null:").build();
 		}
 	}
+
+	void String doitnow(Object o){
+		if (o == null)
+			return "This is an " + o.toString() + "object";
+		else
+			return "Null object";
+	}
 }
