@@ -10,10 +10,10 @@ on:
   push:
     # At this time, it is recommended to run Polaris only on pushes to main branches
     # Pull request analysis will be supported by Polaris in the future
-    branches: [ "master" ]
+    branches: [ main, master ]
 
   pull_request:
-    branches: [ "master" ]
+    branches: [ main, master ]
 
 jobs:
   build:
@@ -34,13 +34,21 @@ jobs:
           coverity_install_directory: c:\Products\ca202312
           coverity_project_name: Security WebShop
 
+          coverity_policy_view: 'Saftey Gate'
+          coverity_prComment_enabled: true
+
           #------------------------------------------BLACKDUCK----------------------------------------
-          blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN }}
+          blackduck_token: ${{ secrets.BLACKDUCK_TOKEN }}
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
 
+          blackduck_scan_failure_severities: 'BLOCKER,CRITICAL'
+          blackduck_fixpr_enabled: true
+          blackduck_prcomment_enabled: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
           #------------------------------------------POLARIS------------------------------------------
-          polaris_server_url: ${{ secrets.POLARIS_SERVER_URL }}
-          polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris_assessment_types: "SCA,SAST"
+          #polaris_server_url: ${{ secrets.POLARIS_SERVER_URL }}
+          #polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          #polaris_assessment_types: "SCA,SAST"
 
 
