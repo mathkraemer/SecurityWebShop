@@ -5,7 +5,7 @@
 name: Synopsys Security Testing
 
 on:
-  workflow-dispatch:
+  workflow_dispatch:
     
   push:
     # At this time, it is recommended to run Polaris only on pushes to main branches
