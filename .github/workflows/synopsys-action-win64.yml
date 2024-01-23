@@ -13,6 +13,8 @@ on:
   pull_request:
     branches: [ "master" ]
 
+  workflow-dispatch:
+
 jobs:
   build:
     runs-on: [self-hosted, Windows, X64]
