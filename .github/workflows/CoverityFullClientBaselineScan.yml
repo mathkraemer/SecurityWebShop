@@ -2,6 +2,7 @@ name: Coverity Full-Client Baseline Analysis
 on:
   push:
     branches: [ master, main ]
+  workflow_dispatch:
 
 jobs:
   build:
