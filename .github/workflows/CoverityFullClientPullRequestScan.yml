@@ -84,11 +84,12 @@ jobs:
             --stream ${{ env.COVERITY_CONNECT_STREAM_NAME }}\
             --auth-key-file ${{ env.COVERITY_CONNECT_AUTHENTICATION_FILE }} \
             --reference-snapshot latest \
-            --present-in-reference false \
-            --ignore-uncapturable-inputs true \
+            --ignore-uncapturable-inputs true --whole-program \
             --json-output-v7 coverity-results.json \
             --exit1-if-defects false \
             ${{ steps.changeset.outputs.all_changed_files }}
+
+            #            --present-in-reference false \
 
           echo =========== c-r-d results ==================== 
           cat ${COVERITY_LOCAL_IDIR}/output/summary.txt
