@@ -23,8 +23,8 @@ jobs:
           polaris_assessment_types: "SCA,SAST"
           
           ### SCANNING: Optional fields
-          # polaris_application_name: MKM-${{ github.event.repository.name }}
-          # polaris_project_name: ${{ github.event.repository.name }}-Github-Action
+          polaris_application_name: MKM-${{ github.event.repository.name }}  # overwriting default
+          polaris_project_name: ${{ github.event.repository.name }}-Github-Action # overwriting default
           
           ### PULL REQUEST COMMENTS: Uncomment below to enable
           polaris_prComment_enabled: true 
