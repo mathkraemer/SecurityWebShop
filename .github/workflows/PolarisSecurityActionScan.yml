@@ -27,7 +27,7 @@ jobs:
           polaris_project_name: ${{ github.event.repository.name }}-Github-Action # overwriting default
           
           ### PULL REQUEST COMMENTS: Uncomment below to enable
-          polaris_prComment_enabled: true 
+          polaris_prComment_enabled: true
           github_token: ${{ secrets.POLARIS_GITHUB_TOKEN }} # Required when PR comments is enabled
 
           ### SARIF report parameters
