@@ -7,5 +7,12 @@ public class Feature1 {
     else
       return "no value";
   }
+
+    public String convertToString2(Object o){
+    if (o == null)
+      return o.toString();
+    else
+      return "no value";
+  }
   
 }
