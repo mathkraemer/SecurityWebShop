@@ -8,7 +8,7 @@ public class Feature1 {
       return "no value";
   }
 
-  // This is another function
+  // This is an alternative converter function
     public String convertToString2(Object o){
     if (o == null)
       return o.toString();
