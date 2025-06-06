@@ -16,7 +16,7 @@ public class Feature1 {
       return "no value";
   }
 
-    // Lets fix this
+    // Lets fix this once more
     public String convertToString3(Object o){
     if (o != null)
       return o.toString();
