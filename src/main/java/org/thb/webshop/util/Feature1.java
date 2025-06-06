@@ -10,7 +10,7 @@ public class Feature1 {
 
   // This is an alternative converter function
     public String convertToString2(Object o){
-    if (o == null)
+    if (o != null)
       return o.toString();
     else
       return "no value";
