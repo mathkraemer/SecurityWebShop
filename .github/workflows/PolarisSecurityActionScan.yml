@@ -28,6 +28,7 @@ jobs:
           
           ### PULL REQUEST COMMENTS: Uncomment below to enable
           polaris_prComment_enabled: true
+          polaris_prComment_severities: "critical, high, medium, low"
           github_token: ${{ secrets.POLARIS_GITHUB_TOKEN }} # Required when PR comments is enabled
 
           ### SARIF report parameters
